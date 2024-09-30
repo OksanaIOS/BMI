@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculateViewController: UIViewController {
     
     //MARK: - UI
     
@@ -42,7 +42,10 @@ class ViewController: UIViewController {
         return element
     }()
     
-    private lazy var calculateButton = UIButton(isBackgroundWhite: false)
+    private let calculateButton = UIButton(isBackgroundWhite: false)
+    //MARK: - Private Properties
+    
+    private var calculatorBrain = CalculateBrain()
     
     //MARK: - Life Cycle
 
@@ -53,6 +56,7 @@ class ViewController: UIViewController {
     
     }
     private func setViews() {
+        
         heightStackView = UIStackView(axis: .horizontal, distribution: .fillEqually, subViews: [heightTitleLabel, heightNumberLabel])
         weightStackView = UIStackView(axis: .horizontal, distribution: .fillEqually, subViews: [weightTitleLabel, weightNumberLabel])
         mainStackView = UIStackView(axis: .vertical, distribution: .fillProportionally, subViews: [titleLabel, heightStackView, heightSlider, weightStackView, weightSlider, calculateButton])
@@ -68,16 +72,41 @@ class ViewController: UIViewController {
         weightNumberLabel.text = "100 kg"
         
         calculateButton.addTarget(self, action: #selector(calculateButtonTapped), for: .touchUpInside)
+        
+        heightSlider.addTarget(self, action: #selector(heightSliderChanged), for: .valueChanged)
+        
+        weightSlider.addTarget(self, action: #selector(weightSliderChanged), for: .valueChanged)
 
     }
+    
+    @objc private func heightSliderChanged(_ sender: UISlider) {
+        heightNumberLabel.text = String(format: "%.2f", sender.value) + "m"
+    }
+    
+    @objc private func weightSliderChanged(_ sender: UISlider) {
+        weightNumberLabel.text = String(format: "%.0f", sender.value) + "kg"
+    }
+    
+    
     @objc private func calculateButtonTapped() {
-        print("tap")
+        
+        let height = heightSlider.value
+        let weight = weightSlider.value
+        let resultVC = ResultViewController()
+    
+        resultVC.modalTransitionStyle = .flipHorizontal
+        resultVC.modalPresentationStyle = .fullScreen
+        
+        resultVC.bmiVaLue = calculatorBrain.getBMIValue()
+        resultVC.advice = calculatorBrain.getAdvice()
+        resultVC.color = calculatorBrain.getColor()
+        present(resultVC, animated: true)
     }
 
 
 }
 
-extension ViewController {
+extension CalculateViewController {
     private func setupConstraints() {
         view.addConstraints([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -104,61 +133,9 @@ extension ViewController {
     }
     
 }
-extension UIStackView {
-    convenience init(axis: NSLayoutConstraint.Axis, distribution: UIStackView.Distribution, subViews: [UIView]) {
-        self.init(arrangedSubviews: subViews)
-        self.axis = axis
-        self.distribution = distribution
-        self.spacing = 0
-        self.translatesAutoresizingMaskIntoConstraints = false
-
-    }
-    
-}
-extension UILabel {
-    convenience init(alignment: NSTextAlignment) {
-        self.init()
-        self.textAlignment = alignment
-        self.font = .systemFont(ofSize: 17, weight: .light)
-        self.textColor = .darkGray
-        self.translatesAutoresizingMaskIntoConstraints = false
-
-    }
-    
-}
-extension UISlider {
-    convenience init(maxValue: Float) {
-        self.init()
-        
-        self.maximumValue = maxValue
-        self.value = maxValue / 2
-        self.thumbTintColor = UIColor(red: 0.45, green: 0.45, blue: 0.82, alpha: 0.5)
-        self.minimumTrackTintColor = UIColor(red: 0.45, green: 0.45, blue: 0.82, alpha: 0.5)
-        self.translatesAutoresizingMaskIntoConstraints = false
-
-    }
-    
-}
-extension UIButton {
-    convenience init(isBackgroundWhite: Bool) {
-        self.init(type: .system)
-        let color = UIColor(red: 0.45, green: 0.45, blue: 0.82, alpha: 1.00)
-        let text = isBackgroundWhite ? "RECALCULATE" : "CALCULATE"
-        self.tintColor = isBackgroundWhite ? color : .white
-        self.backgroundColor = isBackgroundWhite ? .white : color
-        self.layer.cornerRadius = 10
-        self.titleLabel?.font = .systemFont(ofSize: 20)
-        self.setTitle(text, for: .normal)
-        self.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-}
-
-
-
 
 #Preview {
-    ViewController()
+    CalculateViewController()
 }
 
 
