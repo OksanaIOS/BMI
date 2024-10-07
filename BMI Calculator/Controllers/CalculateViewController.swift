@@ -133,9 +133,9 @@ extension CalculateViewController {
     }
     
 }
-
-#Preview {
-    CalculateViewController()
-}
+//
+//#Preview {
+//    CalculateViewController()
+//}
 
 
