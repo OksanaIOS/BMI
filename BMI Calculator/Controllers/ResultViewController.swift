@@ -37,7 +37,7 @@ class ResultViewController: UIViewController {
         let element = UILabel()
         element.font = .systemFont(ofSize: 80, weight: .bold)
         element.textColor = .white
-        element.textAlignment = .left
+        element.textAlignment = .center
         element.numberOfLines = 0
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ class ResultViewController: UIViewController {
         let element = UILabel()
         element.font = .systemFont(ofSize: 20, weight: .light)
         element.textColor = .white
-        element.textAlignment = .left
+        element.textAlignment = .center
         element.numberOfLines = 0
         
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -76,17 +76,16 @@ class ResultViewController: UIViewController {
     private func setViews() {
         resultLabel.text = bmiVaLue
         descriptionLabel.text = advice
+        view.backgroundColor = color
         
         mainStackView = UIStackView(axis: .vertical, distribution: .fillProportionally, subViews: [titleLabel, resultLabel, descriptionLabel])
         view.addSubview(backgroundImageView)
         view.addSubview(mainStackView)
         view.addSubview(recalculateButton)
-     
+    
         titleLabel.text = "YOUR RESULT"
-        resultLabel.text = "19.5"
-        descriptionLabel.text = "EAT SOME MORE SNACKS"
+       
         
-        view.backgroundColor = .blue
         
         
         recalculateButton.addTarget(self, action: #selector(recalculateButtonTapped), for: .touchUpInside)
@@ -121,7 +120,7 @@ extension ResultViewController {
         
     }
 }
-//#Preview {
-//    ResultViewController()
-//}
+#Preview {
+    ResultViewController()
+}
     

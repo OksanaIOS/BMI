@@ -92,14 +92,17 @@ class CalculateViewController: UIViewController {
         
         let height = heightSlider.value
         let weight = weightSlider.value
+        
+        calculatorBrain.calculateBMI(height: height, weight: weight)
         let resultVC = ResultViewController()
     
         resultVC.modalTransitionStyle = .flipHorizontal
         resultVC.modalPresentationStyle = .fullScreen
         
         resultVC.bmiVaLue = calculatorBrain.getBMIValue()
-        resultVC.advice = calculatorBrain.getAdvice()
         resultVC.color = calculatorBrain.getColor()
+        resultVC.advice = calculatorBrain.getAdvice()
+      
         present(resultVC, animated: true)
     }
 
@@ -133,9 +136,9 @@ extension CalculateViewController {
     }
     
 }
-//
-//#Preview {
-//    CalculateViewController()
-//}
+
+#Preview {
+    CalculateViewController()
+}
 
 
